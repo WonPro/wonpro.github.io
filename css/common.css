@@ -582,9 +582,8 @@ header.sticky{
     height: 100%;
     overflow-y: scroll;
 }
-.imgPopUpWindow .modal .imgWrap .popupImg{
+.imgPopUpWindow .modal .imgWrap #popupImg{
     width: 100%;
-    height: 100%;
 }
 /* Sub Section Fullscreen PopUp Part End*/
 

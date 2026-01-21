@@ -374,6 +374,10 @@ $(document).ready(function(){
         { thumbnailUrl: '/img/etc/경북투어패스추석맞이이벤트.jpg', description: '경북투어패스추석맞이이벤트', category: 'etc', url: '/img/etc/경북투어패스추석맞이이벤트.jpg' },
         { thumbnailUrl: '/img/etc/경북투어패스모바일배너.jpg', description: '경북투어패스모바일배너', category: 'etc', url: '/img/etc/경북투어패스모바일배너.jpg' },
         { thumbnailUrl: '/img/etc/경북투어패스가맹점모집_배너.jpg', description: '경북투어패스가맹점모집', category: 'etc', url: '/img/etc/경북투어패스가맹점모집.jpg' },
+        { thumbnailUrl: '/img/uiux/delivery-thumbnail.jpg', description: '배송 서비스 앱', category: 'uiux', url: '/img/uiux/delivery.jpg' },
+        { thumbnailUrl: '/img/uiux/esports-thumbnail.jpg', description: '게임 커뮤니티 웹', category: 'uiux', url: '/img/uiux/esports.jpg' },
+        { thumbnailUrl: '/img/uiux/sellerconnect-thumbnail.jpg', description: '공동구매 매칭 플랫폼', category: 'uiux', url: '/img/uiux/sellerconnect.jpg' },
+        { thumbnailUrl: '/img/uiux/shop-thumbnail.jpg', description: '배달 플랫폼 관리 솔루션 앱', category: 'uiux', url: '/img/uiux/shop.jpg' },
         // 추가 이미지들을 여기에 추가합니다.
     ];
 
