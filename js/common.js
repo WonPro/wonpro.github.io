@@ -1,228 +1,1009 @@
-$(document).ready(function () {
+(() => {
+    "use strict";
 
-    /* =====================
-        1. 초기 실행
-    ===================== */
-    let imageData = [
-        { thumbnailUrl: '/img/homepage/cs.jpg', description: '(주)CS 회사 홈페이지 제작', category: 'homepage', url: 'http://ucsit.co.kr/' },
-        { thumbnailUrl: '/img/homepage/jeus.jpg', description: '주식회사 제우스 회사 홈페이지 제작', category: 'homepage', url: 'https://www.jeuscorp.com/' },
-        { thumbnailUrl: '/img/homepage/lscompany.jpg', description: '엘에스컴퍼니 회사 홈페이지 제작', category: 'homepage', url: 'https://www.xn--9t4b19cu7p32a.com/' },
-        { thumbnailUrl: '/img/homepage/jdc.jpg', description: 'JDC 서브페이지 유지보수', category: 'homepage', url: 'https://www.jdcenter.com/main.cs' },
-        { thumbnailUrl: '/img/homepage/jejuma.jpg', description: '제주마등록관리 정보시스템 홈페이지 제작', category: 'homepage', url: 'https://jejuhorse.jeju.go.kr/' },
-        { thumbnailUrl: '/img/homepage/chagoji.jpg', description: '차고지 증명제 홈페이지 제작', category: 'homepage', url: 'https://parking.jeju.go.kr/online/proof.cs' },
-        { thumbnailUrl: '/img/homepage/meercop.jpg', description: '미어캅 홈페이지 제작', category: 'homepage', url: 'https://www.meercop.com/' },
-        { thumbnailUrl: '/img/detail/가을동화감귤밭_배너.jpg', description: '가을동화감귤밭', category: 'detail', url: '/img/detail/가을동화감귤밭.jpg' },
-        { thumbnailUrl: '/img/detail/더카트인통영_배너.jpg', description: '더카트인통영', category: 'detail', url: '/img/detail/더카트인통영.jpg' },
-        { thumbnailUrl: '/img/detail/레전드히어로즈_배너.jpg', description: '레전드히어로즈', category: 'detail', url: '/img/detail/레전드히어로즈.jpg' },
-        { thumbnailUrl: '/img/detail/매미보트투어_배너.jpg', description: '매미보트투어', category: 'detail', url: '/img/detail/매미보트투어.jpg' },
-        { thumbnailUrl: '/img/detail/붕어섬생태공원_배너.jpg', description: '붕어섬생태공원', category: 'detail', url: '/img/detail/붕어섬생태공원.jpg' },
-        { thumbnailUrl: '/img/detail/산양큰엉곶_배너.jpg', description: '산양큰엉곶', category: 'detail', url: '/img/detail/산양큰엉곶.jpg' },
-        { thumbnailUrl: '/img/detail/석예원본초족욕_배너.jpg', description: '석예원본초족욕', category: 'detail', url: '/img/detail/석예원본초족욕.jpg' },
-        { thumbnailUrl: '/img/detail/스카이라인루지통영_배너.jpg', description: '스카이라인루지통영', category: 'detail', url: '/img/detail/스카이라인루지통영.jpg' },
-        { thumbnailUrl: '/img/detail/오창온천로하스파_배너.jpg', description: '오창온천로하스파', category: 'detail', url: '/img/detail/오창온천로하스파.jpg' },
-        { thumbnailUrl: '/img/detail/우도유람선_배너.jpg', description: '우도유람선', category: 'detail', url: '/img/detail/우도유람선.jpg' },
-        { thumbnailUrl: '/img/detail/이스케이프탑_배너.jpg', description: '이스케이프탑', category: 'detail', url: '/img/detail/이스케이프탑.jpg' },
-        { thumbnailUrl: '/img/detail/일타스키렌탈샵_배너.jpg', description: '일타스키렌탈샵', category: 'detail', url: '/img/detail/일타스키렌탈샵.jpg' },
-        { thumbnailUrl: '/img/detail/쿵스롤러장_배너.jpg', description: '쿵스롤러장', category: 'detail', url: '/img/detail/쿵스롤러장.jpg' },
-        { thumbnailUrl: '/img/detail/팔공별빛랜드_배너.jpg', description: '팔공별빛랜드', category: 'detail', url: '/img/detail/팔공별빛랜드.jpg' },
-        { thumbnailUrl: '/img/detail/하이스키렌탈샵_배너.jpg', description: '하이스키렌탈샵', category: 'detail', url: '/img/detail/하이스키렌탈샵.jpg' },
-        { thumbnailUrl: '/img/detail/홍천VIP렌탈샵_배너.jpg', description: '홍천VIP렌탈샵', category: 'detail', url: '/img/detail/홍천VIP렌탈샵.jpg' },
-        { thumbnailUrl: '/img/etc/세계자동차&피아노박물관관악제.jpg', description: '세계자동차&피아노박물관 관악제', category: 'etc', url: '/img/etc/세계자동차&피아노박물관관악제.jpg' },
-        { thumbnailUrl: '/img/etc/경북투어패스추석맞이이벤트.jpg', description: '경북투어패스추석맞이이벤트', category: 'etc', url: '/img/etc/경북투어패스추석맞이이벤트.jpg' },
-        { thumbnailUrl: '/img/etc/경북투어패스모바일배너.jpg', description: '경북투어패스모바일배너', category: 'etc', url: '/img/etc/경북투어패스모바일배너.jpg' },
-        { thumbnailUrl: '/img/etc/경북투어패스가맹점모집_배너.jpg', description: '경북투어패스가맹점모집', category: 'etc', url: '/img/etc/경북투어패스가맹점모집.jpg' },
-        { thumbnailUrl: '/img/uiux/delivery-thumbnail.jpg', description: '배송 서비스 앱', category: 'uiux', url: '/img/uiux/delivery.jpg' },
-        { thumbnailUrl: '/img/uiux/esports-thumbnail.jpg', description: '게임 커뮤니티 웹', category: 'uiux', url: '/img/uiux/esports.jpg' },
-        { thumbnailUrl: '/img/uiux/sellerconnect-thumbnail.jpg', description: '공동구매 매칭 플랫폼', category: 'uiux', url: '/img/uiux/sellerconnect.jpg' },
-        { thumbnailUrl: '/img/uiux/shop-thumbnail.jpg', description: '배달 플랫폼 관리 솔루션 앱', category: 'uiux', url: '/img/uiux/shop.jpg' },
+    const SELECTORS = {
+        header: "header",
+        mobileMenuButton: ".menu_hamburger",
+        mobileSubMenu: ".mobileSubMenu",
+        hamburgerLines: ".f_hamburger, .s_hamburger, .t_hamburger",
+
+        typedText: "#typedText",
+
+        videoContainer: ".videoContainer",
+        videoSlides: ".slideVideo",
+        prevButton: ".prevBtn",
+        nextButton: ".nextBtn",
+        prevNumber: ".prevBtn_topText",
+        prevTitle: ".prevBtn_botText",
+        nextNumber: ".nextBtn_topText",
+        nextTitle: ".nextBtn_botText",
+
+        moreButton: ".mainVisual .moreBtn",
+        portfolioSection: "#portfolio",
+
+        contentWrap: "#contentWrap",
+        topButton: ".topBtn",
+
+        tabs: ".tab",
+        gallery: ".gallery",
+
+        imageModal: ".imgPopUpWindow",
+        imageModalClose: ".imgPopUpWindow .closeBtn",
+        popupImage: "#popupImg"
+    };
+
+    const BREAKPOINTS = {
+        desktop: 1200,
+        mobile: 575
+    };
+
+    const VIDEO_INFO = [
+        { number: "01", title: "Diary" },
+        { number: "02", title: "Laptop" },
+        { number: "03", title: "Beer with LP" },
+        { number: "04", title: "Cherry blossom" }
     ];
 
-    initLayout();
-    initTypedText();
-    initVideoSlider();
-    initPopup();
-    initScrollEvents();
-    initPortfolio();
+    const TYPED_WORDS = [
+        "Javascript",
+        "CSS",
+        "Photoshop",
+        "Figma"
+    ];
 
-    /* =====================
-        2. Layout / Responsive
-    ===================== */
-    function initLayout() {
-        browserWidth();
-        $(window).on('resize', browserWidth);
+    const PORTFOLIO_ITEMS_PER_PAGE = 8;
+
+    const state = {
+        currentSlide: 1,
+        originalSlideCount: 0,
+        isSliderAnimating: false,
+        lastFocusedElement: null,
+        typingTimer: null,
+        resizeTimer: null,
+
+        currentPortfolioCategory: "all",
+        currentPortfolioPage: 1
+    };
+
+    document.addEventListener("DOMContentLoaded", init);
+
+
+    /* ==================================================
+       01. Initialization
+    ================================================== */
+
+    function init() {
+        initResponsiveLayout();
+        initMobileMenu();
+        initTypedText();
+        initVideoSlider();
+        initScrollEvents();
+        initPortfolio();
+        initImageModal();
     }
 
-    function browserWidth() {
-        let winWidth = $(window).width();
 
-        if (winWidth > 575) {
-            if (winWidth > 1199) {
-                setPageBtnStyle('pc');
-                resetHamburger();
-            } else {
-                setPageBtnStyle('tablet');
+    /* ==================================================
+       02. Helpers
+    ================================================== */
+
+    function getElement(selector, parent = document) {
+        return parent.querySelector(selector);
+    }
+
+    function getElements(selector, parent = document) {
+        return [...parent.querySelectorAll(selector)];
+    }
+
+    function prefersReducedMotion() {
+        return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    }
+
+    function scrollToElement(element, offset = 0) {
+        if (!element) {
+            return;
+        }
+
+        const top =
+            element.getBoundingClientRect().top +
+            window.scrollY -
+            offset;
+
+        window.scrollTo({
+            top,
+            behavior: prefersReducedMotion() ? "auto" : "smooth"
+        });
+    }
+
+    function setElementVisible(element, visible, displayValue = "") {
+        if (!element) {
+            return;
+        }
+
+        element.style.display = visible ? displayValue : "none";
+        element.setAttribute("aria-hidden", String(!visible));
+    }
+
+    function getFocusableElements(container) {
+        if (!container) {
+            return [];
+        }
+
+        return getElements(
+            [
+                "a[href]",
+                "button:not([disabled])",
+                "input:not([disabled])",
+                "select:not([disabled])",
+                "textarea:not([disabled])",
+                '[tabindex]:not([tabindex="-1"])'
+            ].join(","),
+            container
+        ).filter((element) => !element.hidden && element.offsetParent !== null);
+    }
+
+
+    /* ==================================================
+       03. Responsive Layout
+    ================================================== */
+
+    function initResponsiveLayout() {
+        updateResponsiveLayout();
+
+        window.addEventListener("resize", () => {
+            window.clearTimeout(state.resizeTimer);
+
+            state.resizeTimer = window.setTimeout(() => {
+                updateResponsiveLayout();
+            }, 150);
+        });
+    }
+
+    function updateResponsiveLayout() {
+        const width = window.innerWidth;
+
+        if (width >= BREAKPOINTS.desktop) {
+            resetMobileMenu();
+        }
+
+        /*
+         * 이전 jQuery 파일에서 JS 애니메이션으로 조정하던
+         * 이전/다음 버튼 위치는 현재 common.css의 반응형 규칙이 담당한다.
+         */
+    }
+
+
+    /* ==================================================
+       04. Mobile Menu
+    ================================================== */
+
+    function initMobileMenu() {
+        const menuButton = getElement(SELECTORS.mobileMenuButton);
+        const mobileSubMenu = getElement(SELECTORS.mobileSubMenu);
+
+        if (!menuButton || !mobileSubMenu) {
+            return;
+        }
+
+        menuButton.setAttribute("aria-expanded", "false");
+
+        if (!mobileSubMenu.id) {
+            mobileSubMenu.id = "mobileSubMenu";
+        }
+
+        menuButton.setAttribute("aria-controls", mobileSubMenu.id);
+        mobileSubMenu.setAttribute("aria-hidden", "true");
+
+        menuButton.addEventListener("click", () => {
+            const isOpen = menuButton.getAttribute("aria-expanded") === "true";
+            setMobileMenuState(!isOpen);
+        });
+
+        mobileSubMenu.addEventListener("click", (event) => {
+            if (event.target.closest("a")) {
+                resetMobileMenu();
             }
-        } else {
-            setPageBtnStyle('mobile');
+        });
+
+        document.addEventListener("keydown", (event) => {
+            if (event.key === "Escape") {
+                resetMobileMenu();
+            }
+        });
+
+        document.addEventListener("click", (event) => {
+            const clickedInsideMenu =
+                menuButton.contains(event.target) ||
+                mobileSubMenu.contains(event.target);
+
+            if (!clickedInsideMenu) {
+                resetMobileMenu();
+            }
+        });
+    }
+
+    function setMobileMenuState(isOpen) {
+        const menuButton = getElement(SELECTORS.mobileMenuButton);
+        const mobileSubMenu = getElement(SELECTORS.mobileSubMenu);
+        const hamburgerLines = getElements(SELECTORS.hamburgerLines);
+
+        if (!menuButton || !mobileSubMenu) {
+            return;
+        }
+
+        menuButton.classList.toggle("active", isOpen);
+        menuButton.setAttribute("aria-expanded", String(isOpen));
+        menuButton.setAttribute(
+            "aria-label",
+            isOpen ? "메뉴 닫기" : "메뉴 열기"
+        );
+
+        hamburgerLines.forEach((line) => {
+            line.classList.toggle("active", isOpen);
+        });
+
+        mobileSubMenu.style.display = isOpen ? "block" : "none";
+        mobileSubMenu.setAttribute("aria-hidden", String(!isOpen));
+    }
+
+    function resetMobileMenu() {
+        setMobileMenuState(false);
+    }
+
+
+    /* ==================================================
+       05. Typed Text
+    ================================================== */
+
+    function initTypedText() {
+        const typedText = getElement(SELECTORS.typedText);
+
+        if (!typedText) {
+            return;
+        }
+
+        typedText.setAttribute("aria-hidden", "true");
+
+        if (prefersReducedMotion()) {
+            typedText.textContent = TYPED_WORDS[0];
+            return;
+        }
+
+        let wordIndex = 0;
+        let characterIndex = 0;
+        let isDeleting = false;
+        let pauseCount = 0;
+
+        function type() {
+            const currentWord = TYPED_WORDS[wordIndex];
+
+            if (!isDeleting) {
+                characterIndex += 1;
+            } else {
+                characterIndex -= 1;
+            }
+
+            typedText.textContent = currentWord.slice(0, characterIndex);
+
+            let delay = isDeleting ? 55 : 100;
+
+            if (!isDeleting && characterIndex === currentWord.length) {
+                pauseCount += 1;
+                delay = 1000;
+
+                if (pauseCount >= 1) {
+                    isDeleting = true;
+                    pauseCount = 0;
+                }
+            }
+
+            if (isDeleting && characterIndex === 0) {
+                isDeleting = false;
+                wordIndex = (wordIndex + 1) % TYPED_WORDS.length;
+                delay = 250;
+            }
+
+            state.typingTimer = window.setTimeout(type, delay);
+        }
+
+        type();
+    }
+
+
+    /* ==================================================
+       06. Video Slider
+    ================================================== */
+
+    function initVideoSlider() {
+        const container = getElement(SELECTORS.videoContainer);
+        const originalSlides = getElements(SELECTORS.videoSlides);
+        const prevButton = getElement(SELECTORS.prevButton);
+        const nextButton = getElement(SELECTORS.nextButton);
+
+        if (!container || originalSlides.length === 0) {
+            return;
+        }
+
+        state.originalSlideCount = originalSlides.length;
+
+        /*
+         * 무한 슬라이드를 위해 마지막 슬라이드를 맨 앞에,
+         * 첫 번째 슬라이드를 맨 뒤에 복제한다.
+         * 실제 첫 슬라이드는 복제본 때문에 인덱스 1에서 시작한다.
+         */
+        const firstClone = originalSlides[0].cloneNode(true);
+        const lastClone = originalSlides[originalSlides.length - 1].cloneNode(true);
+
+        firstClone.dataset.clone = "first";
+        lastClone.dataset.clone = "last";
+        firstClone.setAttribute("aria-hidden", "true");
+        lastClone.setAttribute("aria-hidden", "true");
+
+        container.prepend(lastClone);
+        container.append(firstClone);
+
+        state.currentSlide = 1;
+        setSliderPosition(false);
+        updateVideoSliderState();
+
+        prevButton?.addEventListener("click", () => {
+            moveVideoSlider(-1);
+        });
+
+        nextButton?.addEventListener("click", () => {
+            moveVideoSlider(1);
+        });
+
+        prevButton?.setAttribute("aria-label", "이전 배경 영상 보기");
+        nextButton?.setAttribute("aria-label", "다음 배경 영상 보기");
+
+        container.addEventListener("transitionend", handleSliderTransitionEnd);
+    }
+
+    function moveVideoSlider(direction) {
+        if (state.isSliderAnimating || state.originalSlideCount <= 1) {
+            return;
+        }
+
+        state.isSliderAnimating = true;
+        state.currentSlide += direction;
+
+        setSliderPosition(true);
+        updateVideoSliderState();
+
+        if (prefersReducedMotion()) {
+            handleSliderTransitionEnd();
         }
     }
 
-    function setPageBtnStyle(type) {
-        const pos = {
-            pc: { top: '50%', side: '8.33%' },
-            tablet: { top: '70%', side: '10%' },
-            mobile: { top: '90%', side: '10%' }
+    function setSliderPosition(animate = true) {
+        const container = getElement(SELECTORS.videoContainer);
+
+        if (!container) {
+            return;
+        }
+
+        container.style.transition = animate ? "" : "none";
+        container.style.transform =
+            `translateX(-${state.currentSlide * 100}%)`;
+
+        if (!animate) {
+            /* 강제 리플로우 후 기존 CSS transition을 복구한다. */
+            void container.offsetWidth;
+            container.style.transition = "";
+        }
+    }
+
+    function handleSliderTransitionEnd(event) {
+        const container = getElement(SELECTORS.videoContainer);
+
+        if (!container) {
+            return;
+        }
+
+        if (event && event.target !== container) {
+            return;
+        }
+
+        if (state.currentSlide === 0) {
+            state.currentSlide = state.originalSlideCount;
+            setSliderPosition(false);
+        } else if (state.currentSlide === state.originalSlideCount + 1) {
+            state.currentSlide = 1;
+            setSliderPosition(false);
+        }
+
+        state.isSliderAnimating = false;
+        updateVideoSliderState();
+    }
+
+    function getLogicalSlideIndex() {
+        return (
+            state.currentSlide - 1 + state.originalSlideCount
+        ) % state.originalSlideCount;
+    }
+
+    function updateVideoSliderState() {
+        const slides = getElements(SELECTORS.videoSlides);
+        const logicalIndex = getLogicalSlideIndex();
+
+        slides.forEach((slide, physicalIndex) => {
+            const isClone = Boolean(slide.dataset.clone);
+            const isCurrentPhysicalSlide = physicalIndex === state.currentSlide;
+            const video = getElement("video", slide);
+
+            slide.setAttribute(
+                "aria-hidden",
+                String(isClone || !isCurrentPhysicalSlide)
+            );
+
+            if (!video) {
+                return;
+            }
+
+            video.setAttribute("aria-hidden", "true");
+            video.setAttribute("tabindex", "-1");
+
+            if (isCurrentPhysicalSlide && !prefersReducedMotion()) {
+                const playPromise = video.play();
+
+                if (playPromise instanceof Promise) {
+                    playPromise.catch(() => {
+                        /* 자동 재생이 차단되어도 다른 기능은 유지한다. */
+                    });
+                }
+            } else {
+                video.pause();
+            }
+        });
+
+        updateVideoNavigation(state.originalSlideCount, logicalIndex);
+    }
+
+
+    function updateVideoNavigation(totalSlides, currentIndex = 0) {
+        const prevIndex =
+            (currentIndex - 1 + totalSlides) % totalSlides;
+
+        const nextIndex =
+            (currentIndex + 1) % totalSlides;
+
+        const prevInfo = VIDEO_INFO[prevIndex] ?? {
+            number: String(prevIndex + 1).padStart(2, "0"),
+            title: `영상 ${prevIndex + 1}`
         };
 
-        $(".prevBtn_topText, .prevBtn_botText")
-            .stop().animate({ top: pos[type].top, left: pos[type].side }, 300);
+        const nextInfo = VIDEO_INFO[nextIndex] ?? {
+            number: String(nextIndex + 1).padStart(2, "0"),
+            title: `영상 ${nextIndex + 1}`
+        };
 
-        $(".nextBtn_topText, .nextBtn_botText")
-            .stop().animate({ top: pos[type].top, right: pos[type].side }, 300);
-    }
+        const prevNumber = getElement(SELECTORS.prevNumber);
+        const prevTitle = getElement(SELECTORS.prevTitle);
+        const nextNumber = getElement(SELECTORS.nextNumber);
+        const nextTitle = getElement(SELECTORS.nextTitle);
 
-    function resetHamburger() {
-        $("#topBar .menu_hamburger").removeClass("active");
-        $(".f_hamburger, .s_hamburger, .t_hamburger").removeClass("active");
-        $(".mobileSubMenu").slideUp();
-    }
-
-    /* =====================
-        3. Typed Text
-    ===================== */
-    function initTypedText() {
-        const typedText = $('#typedText');
-        const strings = ["Javascript", "CSS", "Photoshop", "Figma"];
-        let str = 0, char = 0, del = false;
-
-        function typing() {
-            typedText.text(strings[str].substring(0, del ? --char : ++char));
-
-            if (char === strings[str].length) del = true;
-            if (char === 0 && del) {
-                del = false;
-                str = (str + 1) % strings.length;
-            }
-            setTimeout(typing, del ? 50 : 100);
-        }
-        typing();
-    }
-
-    /* =====================
-        4. Video Slider
-    ===================== */
-    function initVideoSlider() {
-        let idx = 0;
-        let total = $('.slideVideo').length;
-        let info = [
-            { text: "Diary", number: "01" },
-            { text: "Laptop", number: "02" },
-            { text: "Beer with LP", number: "03" },
-            { text: "Cherry blossom", number: "04" }
-        ];
-
-        function slide() {
-            $('.videoContainer').css('transform', `translateX(${idx * -100}%)`);
-            updateBtn();
+        if (prevNumber) {
+            prevNumber.textContent = prevInfo.number;
         }
 
-        function updateBtn() {
-            $('.prevBtn_topText').text(info[(idx - 1 + total) % total].number);
-            $('.prevBtn_botText').text(info[(idx - 1 + total) % total].text);
-            $('.nextBtn_topText').text(info[(idx + 1) % total].number);
-            $('.nextBtn_botText').text(info[(idx + 1) % total].text);
+        if (prevTitle) {
+            prevTitle.textContent = prevInfo.title;
         }
 
-        $('.prevBtn').click(() => { idx = (idx - 1 + total) % total; slide(); });
-        $('.nextBtn').click(() => { idx = (idx + 1) % total; slide(); });
-
-        slide();
-    }    
-
-    /* =====================
-        5. Popup
-    ===================== */
-    function initPopup() {
-        function togglePopup(target, scrollLock) {
-            $(target).fadeToggle(300);
-            if (scrollLock) $("body").toggleClass("modal-open");
+        if (nextNumber) {
+            nextNumber.textContent = nextInfo.number;
         }
 
-        $("#loginBtn").click(() => togglePopup("#loginSection", true));
-        $("#joinBtn").click(() => togglePopup("#joinSection", true));
-
-        $(".closeBtn, .darkBg").click(function () {
-            togglePopup(`#${$(this).closest("section").attr("id")}`, false);
-        });
+        if (nextTitle) {
+            nextTitle.textContent = nextInfo.title;
+        }
     }
 
-    /* =====================
-        6. Scroll Events
-    ===================== */
+
+    /* ==================================================
+       07. Scroll Events
+    ================================================== */
+
     function initScrollEvents() {
-        $(window).scroll(function () {
-            $("header").toggleClass("sticky", $(this).scrollTop() > 1);
-            $(".topBtn").toggle($(this).scrollTop() > $("#contentWrap").offset().top - 200);
-        });
+        const header = getElement(SELECTORS.header);
+        const contentWrap = getElement(SELECTORS.contentWrap);
+        const topButton = getElement(SELECTORS.topButton);
+        const moreButton = getElement(SELECTORS.moreButton);
+        const portfolioSection = getElement(SELECTORS.portfolioSection);
 
-        $(".topBtn").click(() => $("html, body").animate({ scrollTop: 0 }, 500));
-    }
+        let ticking = false;
 
-    $(".mainVisual .moreBtn").click(function(){
-        $("html, body").animate({scrollTop: $("#portfolio").offset().top - 100}, 1000);
-    });
+        function updateScrollState() {
+            const scrollTop = window.scrollY;
 
-    /* =====================
-        7. Portfolio
-    ===================== */
-    function initPortfolio() {
+            header?.classList.toggle("sticky", scrollTop > 1);
 
-        imageData.forEach(createCard);
-        filterItems('homepage');
+            if (topButton) {
+                const threshold = contentWrap
+                    ? contentWrap.offsetTop - 200
+                    : 500;
 
-        $('.tab').click(function () {
-            $('.tab').removeClass('active');
-            $(this).addClass('active');
-            filterItems($(this).data('category'));
-        });
+                topButton.style.display =
+                    scrollTop > threshold ? "block" : "none";
+            }
 
-        $('.gallery').on('click', '.card', function () {
-            if ($(this).data('category') === 'homepage') return;
-            $('body').addClass('modal-open');
-            $('.imgPopUpWindow').addClass('active');
-            $('#popupImg').attr('src', $(this).find('.card-image').data('url'));
-        });
-
-        $('.imgPopUpWindow .closeBtn').click(closeModal);
-    }
-
-    function createCard(image) {
-        let $card = $('<div class="card"/>').attr('data-category', image.category);
-        let $desc = $('<div class="description"/>').text(image.description);
-
-        let $img = $('<div class="card-image"/>')
-            .css('background-image', `url(${image.thumbnailUrl})`)
-            .attr('data-url', image.url);
-
-        if (image.category === 'homepage') {
-            $img = $('<a/>', { href: image.url, target: '_blank' }).append($img);
+            ticking = false;
         }
 
-        $('.gallery').append($card.append($img, $desc));
+        window.addEventListener(
+            "scroll",
+            () => {
+                if (!ticking) {
+                    window.requestAnimationFrame(updateScrollState);
+                    ticking = true;
+                }
+            },
+            { passive: true }
+        );
+
+        topButton?.addEventListener("click", () => {
+            window.scrollTo({
+                top: 0,
+                behavior: prefersReducedMotion() ? "auto" : "smooth"
+            });
+        });
+
+        topButton?.setAttribute("aria-label", "페이지 맨 위로 이동");
+
+        moreButton?.addEventListener("click", (event) => {
+            event.preventDefault();
+            scrollToElement(portfolioSection, 100);
+        });
+
+        updateScrollState();
     }
 
-    function filterItems(category) {
-        $('.card').each(function () {
-            $(this).toggleClass(
-                'hidden',
-                !(category === 'all' || $(this).data('category') === category)
+
+    /* ==================================================
+       08. Portfolio
+    ================================================== */
+
+    function initPortfolio() {
+        const gallery = getElement(SELECTORS.gallery);
+        const tabs = getElements(SELECTORS.tabs);
+
+        if (!gallery) {
+            return;
+        }
+
+        const data = Array.isArray(window.portfolioData)
+            ? window.portfolioData
+            : [];
+
+        shuffleArray(data);
+
+        gallery.replaceChildren();
+
+        data.forEach((item) => {
+            gallery.append(createPortfolioCard(item));
+        });
+
+        preparePortfolioTabs(tabs);
+
+        const initialTab =
+            tabs.find((tab) => tab.classList.contains("active")) ??
+            tabs[0];
+
+        if (initialTab) {
+            selectPortfolioTab(initialTab, tabs);
+        } else {
+            filterPortfolioItems("uiux");
+        }
+
+        gallery.addEventListener("click", (event) => {
+            const modalButton = event.target.closest(
+                '.card button[data-portfolio-modal="true"]'
+            );
+
+            if (!modalButton) {
+                return;
+            }
+
+            openImageModal(
+                modalButton.dataset.imageUrl,
+                modalButton.dataset.imageAlt
             );
         });
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+
+            return array;
+        }
     }
 
-    function closeModal() {
-        $('body').removeClass('modal-open');
-        $('.imgPopUpWindow').removeClass('active');
+    function preparePortfolioTabs(tabs) {
+        const tabList = tabs[0]?.parentElement;
+
+        tabList?.setAttribute("role", "tablist");
+
+        tabs.forEach((tab, index) => {
+            tab.setAttribute("role", "tab");
+            tab.setAttribute(
+                "aria-selected",
+                String(tab.classList.contains("active"))
+            );
+
+            if (!tab.id) {
+                tab.id = `portfolioTab${index + 1}`;
+            }
+
+            tab.addEventListener("click", () => {
+                selectPortfolioTab(tab, tabs);
+            });
+
+            tab.addEventListener("keydown", (event) => {
+                const currentIndex = tabs.indexOf(tab);
+                let nextIndex = currentIndex;
+
+                if (event.key === "ArrowRight") {
+                    nextIndex = (currentIndex + 1) % tabs.length;
+                } else if (event.key === "ArrowLeft") {
+                    nextIndex =
+                        (currentIndex - 1 + tabs.length) % tabs.length;
+                } else if (event.key === "Home") {
+                    nextIndex = 0;
+                } else if (event.key === "End") {
+                    nextIndex = tabs.length - 1;
+                } else {
+                    return;
+                }
+
+                event.preventDefault();
+                tabs[nextIndex].focus();
+                selectPortfolioTab(tabs[nextIndex], tabs);
+            });
+        });
     }
 
-});
+    function selectPortfolioTab(selectedTab, tabs) {
+        const category = selectedTab.dataset.category ?? "all";
+        
+        state.currentPortfolioPage = 1;
+
+        tabs.forEach((tab) => {
+            const isSelected = tab === selectedTab;
+
+            tab.classList.toggle("active", isSelected);
+            tab.setAttribute("aria-selected", String(isSelected));
+            tab.setAttribute("tabindex", isSelected ? "0" : "-1");
+        });
+
+        filterPortfolioItems(category);
+    }
+
+    function createPortfolioCard(item) {
+        const card = document.createElement("article");
+        const description = document.createElement("div");
+
+        card.className = "card";
+        card.dataset.category = item.category ?? "";
+
+        description.className = "description";
+        description.textContent =
+            item.description ?? item.title ?? "포트폴리오";
+
+        const image = document.createElement("span");
+
+        image.className = "card-image";
+        image.style.backgroundImage =
+            `url("${String(item.thumbnail ?? "").replaceAll('"', '\\"')}")`;
+
+        if (item.category === "homepage") {
+            const link = document.createElement("a");
+
+            link.href = item.url ?? "#";
+            link.target = "_blank";
+            link.rel = "noopener noreferrer";
+            link.setAttribute(
+                "aria-label",
+                `${description.textContent} 새 창에서 보기`
+            );
+
+            image.setAttribute("aria-hidden", "true");
+            link.append(image);
+            card.append(link, description);
+
+            return card;
+        }
+
+        const button = document.createElement("button");
+
+        button.type = "button";
+        button.dataset.portfolioModal = "true";
+        button.dataset.imageUrl = item.image ?? "";
+        button.dataset.imageAlt =
+            item.alt ?? description.textContent;
+        button.setAttribute(
+            "aria-label",
+            `${description.textContent} 상세 이미지 보기`
+        );
+
+        image.setAttribute("aria-hidden", "true");
+        button.append(image);
+        card.append(button, description);
+
+        return card;
+    }
+
+    function filterPortfolioItems(category) {
+        const gallery = getElement(SELECTORS.gallery);
+        const cards = getElements(".card", gallery);
+
+        if (!gallery) {
+            return;
+        }
+
+        state.currentPortfolioCategory = category;
+
+        const filteredCards = cards.filter((card) => {
+            return (
+                category === "all" ||
+                card.dataset.category === category
+            );
+        });
+
+        const totalPages = Math.ceil(
+            filteredCards.length / PORTFOLIO_ITEMS_PER_PAGE
+        );
+
+        if (
+            totalPages > 0 &&
+            state.currentPortfolioPage > totalPages
+        ) {
+            state.currentPortfolioPage = totalPages;
+        }
+
+        const startIndex =
+            (state.currentPortfolioPage - 1) *
+            PORTFOLIO_ITEMS_PER_PAGE;
+
+        const endIndex =
+            startIndex + PORTFOLIO_ITEMS_PER_PAGE;
+
+        cards.forEach((card) => {
+            card.classList.add("hidden");
+        });
+
+        filteredCards
+            .slice(startIndex, endIndex)
+            .forEach((card) => {
+                card.classList.remove("hidden");
+            });
+
+        renderPortfolioPagination(totalPages);
+    }
+
+    function renderPortfolioPagination(totalPages) {
+        const gallery = getElement(SELECTORS.gallery);
+
+        if (!gallery) {
+            return;
+        }
+
+        let pagination = getElement(".portfolio-pagination");
+
+        if (!pagination) {
+            pagination = document.createElement("nav");
+            pagination.className = "portfolio-pagination";
+            pagination.setAttribute(
+                "aria-label",
+                "포트폴리오 페이지"
+            );
+
+            gallery.insertAdjacentElement(
+                "afterend",
+                pagination
+            );
+
+            pagination.addEventListener("click", (event) => {
+                const button = event.target.closest("[data-page]");
+
+                if (!button || button.disabled) {
+                    return;
+                }
+
+                const page = Number(button.dataset.page);
+
+                if (
+                    !Number.isInteger(page) ||
+                    page < 1 ||
+                    page === state.currentPortfolioPage
+                ) {
+                    return;
+                }
+
+                state.currentPortfolioPage = page;
+
+                filterPortfolioItems(
+                    state.currentPortfolioCategory
+                );
+
+                scrollToElement(gallery, 140);
+            });
+        }
+
+        pagination.replaceChildren();
+
+        if (totalPages <= 1) {
+            pagination.hidden = true;
+            return;
+        }
+
+        pagination.hidden = false;
+
+        pagination.append(
+            createPaginationButton(
+                "이전",
+                state.currentPortfolioPage - 1,
+                state.currentPortfolioPage === 1
+            )
+        );
+
+        for (let page = 1; page <= totalPages; page += 1) {
+            const button = createPaginationButton(
+                String(page),
+                page,
+                false
+            );
+
+            if (page === state.currentPortfolioPage) {
+                button.classList.add("active");
+                button.setAttribute("aria-current", "page");
+            }
+
+            pagination.append(button);
+        }
+
+        pagination.append(
+            createPaginationButton(
+                "다음",
+                state.currentPortfolioPage + 1,
+                state.currentPortfolioPage === totalPages
+            )
+        );
+    }
+
+    function createPaginationButton(label, page, disabled) {
+        const button = document.createElement("button");
+
+        button.type = "button";
+        button.className = "pagination-button";
+        button.textContent = label;
+        button.dataset.page = String(page);
+        button.disabled = disabled;
+
+        return button;
+    }
+
+
+    /* ==================================================
+       09. Image Modal
+    ================================================== */
+
+    function initImageModal() {
+        const modal = getElement(SELECTORS.imageModal);
+        const closeButton = getElement(SELECTORS.imageModalClose);
+
+        if (!modal) {
+            return;
+        }
+
+        modal.setAttribute("role", "dialog");
+        modal.setAttribute("aria-modal", "true");
+        modal.setAttribute("aria-hidden", "true");
+
+        closeButton?.setAttribute("aria-label", "상세 이미지 닫기");
+
+        closeButton?.addEventListener("click", closeImageModal);
+
+        modal.addEventListener("click", (event) => {
+            if (event.target === modal) {
+                closeImageModal();
+            }
+        });
+
+        modal.addEventListener("keydown", trapModalFocus);
+
+        document.addEventListener("keydown", (event) => {
+            if (
+                event.key === "Escape" &&
+                modal.classList.contains("active")
+            ) {
+                closeImageModal();
+            }
+        });
+    }
+
+    function openImageModal(imageUrl, imageAlt = "포트폴리오 상세 이미지") {
+        const modal = getElement(SELECTORS.imageModal);
+        const popupImage = getElement(SELECTORS.popupImage);
+        const closeButton = getElement(SELECTORS.imageModalClose);
+
+        if (!modal || !popupImage || !imageUrl) {
+            return;
+        }
+
+        state.lastFocusedElement = document.activeElement;
+
+        popupImage.src = imageUrl;
+        popupImage.alt = imageAlt;
+
+        modal.classList.add("active");
+        modal.setAttribute("aria-hidden", "false");
+        document.body.classList.add("modal-open");
+
+        window.requestAnimationFrame(() => {
+            closeButton?.focus();
+        });
+    }
+
+    function closeImageModal() {
+        const modal = getElement(SELECTORS.imageModal);
+        const popupImage = getElement(SELECTORS.popupImage);
+
+        if (!modal) {
+            return;
+        }
+
+        modal.classList.remove("active");
+        modal.setAttribute("aria-hidden", "true");
+        document.body.classList.remove("modal-open");
+
+        if (popupImage) {
+            popupImage.removeAttribute("src");
+            popupImage.alt = "";
+        }
+
+        if (
+            state.lastFocusedElement instanceof HTMLElement &&
+            document.contains(state.lastFocusedElement)
+        ) {
+            state.lastFocusedElement.focus();
+        }
+
+        state.lastFocusedElement = null;
+    }
+
+    function trapModalFocus(event) {
+        if (event.key !== "Tab") {
+            return;
+        }
+
+        const modal = getElement(SELECTORS.imageModal);
+        const focusableElements = getFocusableElements(modal);
+
+        if (focusableElements.length === 0) {
+            event.preventDefault();
+            return;
+        }
+
+        const firstElement = focusableElements[0];
+        const lastElement =
+            focusableElements[focusableElements.length - 1];
+
+        if (
+            event.shiftKey &&
+            document.activeElement === firstElement
+        ) {
+            event.preventDefault();
+            lastElement.focus();
+        } else if (
+            !event.shiftKey &&
+            document.activeElement === lastElement
+        ) {
+            event.preventDefault();
+            firstElement.focus();
+        }
+    }
+})();

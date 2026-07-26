@@ -1,0 +1,8 @@
+node_modules/
+.vscode/
+package-lock.json
+.DS_Store
+Thumbs.db
+package.json
+package-lock.json
+node_modules/
