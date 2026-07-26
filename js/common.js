@@ -29,7 +29,9 @@
 
         imageModal: ".imgPopUpWindow",
         imageModalClose: ".imgPopUpWindow .closeBtn",
-        popupImage: "#popupImg"
+        popupImage: "#popupImg",
+
+        musicButton: "#toggleButton",
     };
 
     const BREAKPOINTS = {
@@ -67,6 +69,11 @@
 
     document.addEventListener("DOMContentLoaded", init);
 
+    let youtubePlayer = null;
+    let isYoutubePlayerReady = false;
+
+    const YOUTUBE_VIDEO_ID = "VpquwB4fLng"
+
 
     /* ==================================================
        01. Initialization
@@ -80,6 +87,7 @@
         initScrollEvents();
         initPortfolio();
         initImageModal();
+        initBackgroundMusicButton();
     }
 
 
@@ -1006,4 +1014,90 @@
             firstElement.focus();
         }
     }
+
+    /* ==================================================
+        Background Music - YouTube
+    ================================================== */
+
+    function initBackgroundMusicButton() {
+        const musicButton = document.querySelector(SELECTORS.musicButton);
+
+        if (!musicButton) {
+            return;
+        }
+
+        musicButton.disabled = false;
+
+        musicButton.addEventListener("click", () => {
+            if (!isYoutubePlayerReady || !youtubePlayer) {
+                return;
+            }
+
+            const playerState = youtubePlayer.getPlayerState();
+            const isPlaying = playerState === YT.PlayerState.PLAYING;
+
+            if (isPlaying) {
+                youtubePlayer.pauseVideo();
+            } else {
+                youtubePlayer.playVideo();
+            }
+        });
+    }
+
+    function updateMusicButton(isPlaying) {
+        const musicButton = document.querySelector(SELECTORS.musicButton);
+        const musicIcon = musicButton?.querySelector("svg");
+
+        if (!musicButton) {
+            return;
+        }
+
+        musicButton.setAttribute("aria-pressed", String(isPlaying));
+        musicButton.setAttribute(
+            "aria-label",
+            isPlaying ? "배경 음악 일시정지" : "배경 음악 재생"
+        );
+
+        musicIcon?.classList.toggle("fa-spin", isPlaying);
+    }
+
+    window.onYouTubeIframeAPIReady = function () {
+        youtubePlayer = new YT.Player("player", {
+            width: "200",
+            height: "200",
+            videoId: YOUTUBE_VIDEO_ID,
+
+            playerVars: {
+                autoplay: 0,
+                controls: 0,
+                playsinline: 1,
+                loop: 1,
+                playlist: YOUTUBE_VIDEO_ID
+            },
+
+            events: {
+                onReady: () => {
+                    isYoutubePlayerReady = true;
+                    youtubePlayer.setVolume(30);
+                },
+
+                onStateChange: event => {
+                    const isPlaying =
+                        event.data === YT.PlayerState.PLAYING;
+
+                    updateMusicButton(isPlaying);
+                },
+
+                onError: error => {
+                    console.error(
+                        "YouTube 배경 음악을 불러오지 못했습니다.",
+                        error.data
+                    );
+
+                    isYoutubePlayerReady = false;
+                    updateMusicButton(false);
+                }
+            }
+        });
+    };
 })();
