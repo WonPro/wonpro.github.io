@@ -324,26 +324,42 @@
 
     function initVideoSlider() {
         const container = getElement(SELECTORS.videoContainer);
-        const originalSlides = getElements(SELECTORS.videoSlides);
         const prevButton = getElement(SELECTORS.prevButton);
         const nextButton = getElement(SELECTORS.nextButton);
 
-        if (!container || originalSlides.length === 0) {
+        if (!container) {
+            return;
+        }
+
+        if (container.dataset.sliderInitialized === "true") {
+            return;
+        }
+
+        container.dataset.sliderInitialized = "true";
+
+        /* 이전에 생성된 복제 슬라이드가 있다면 제거 */
+        container
+            .querySelectorAll("[data-clone]")
+            .forEach(clone => clone.remove());
+
+        /* 복제본을 제외한 실제 원본 슬라이드만 가져온다 */
+        const originalSlides = Array.from(
+            container.querySelectorAll(SELECTORS.videoSlides)
+        ).filter(slide => !slide.dataset.clone);
+
+        if (originalSlides.length === 0) {
             return;
         }
 
         state.originalSlideCount = originalSlides.length;
 
-        /*
-         * 무한 슬라이드를 위해 마지막 슬라이드를 맨 앞에,
-         * 첫 번째 슬라이드를 맨 뒤에 복제한다.
-         * 실제 첫 슬라이드는 복제본 때문에 인덱스 1에서 시작한다.
-         */
         const firstClone = originalSlides[0].cloneNode(true);
-        const lastClone = originalSlides[originalSlides.length - 1].cloneNode(true);
+        const lastClone =
+            originalSlides[originalSlides.length - 1].cloneNode(true);
 
         firstClone.dataset.clone = "first";
         lastClone.dataset.clone = "last";
+
         firstClone.setAttribute("aria-hidden", "true");
         lastClone.setAttribute("aria-hidden", "true");
 
@@ -351,6 +367,8 @@
         container.append(firstClone);
 
         state.currentSlide = 1;
+        state.isSliderAnimating = false;
+
         setSliderPosition(false);
         updateVideoSliderState();
 
@@ -362,10 +380,20 @@
             moveVideoSlider(1);
         });
 
-        prevButton?.setAttribute("aria-label", "이전 배경 영상 보기");
-        nextButton?.setAttribute("aria-label", "다음 배경 영상 보기");
+        prevButton?.setAttribute(
+            "aria-label",
+            "이전 배경 영상 보기"
+        );
 
-        container.addEventListener("transitionend", handleSliderTransitionEnd);
+        nextButton?.setAttribute(
+            "aria-label",
+            "다음 배경 영상 보기"
+        );
+
+        container.addEventListener(
+            "transitionend",
+            handleSliderTransitionEnd
+        );
     }
 
     function moveVideoSlider(direction) {
