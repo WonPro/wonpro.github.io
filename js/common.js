@@ -32,6 +32,11 @@
         popupImage: "#popupImg",
 
         musicButton: "#toggleButton",
+        emailReveal: "[data-email-reveal]",
+        emailResult: "[data-email-result]",
+        emailAddress: "[data-email-address]",
+        emailCopy: "[data-email-copy]",
+        emailLink: "[data-email-link]",
     };
 
     const BREAKPOINTS = {
@@ -87,6 +92,7 @@
         initScrollEvents();
         initPortfolio();
         initImageModal();
+        initEmailReveal();
         initBackgroundMusicButton();
     }
 
@@ -1041,6 +1047,50 @@
             event.preventDefault();
             firstElement.focus();
         }
+    }
+
+    /* Build the address only after user interaction to deter basic source-scraping bots. */
+    function initEmailReveal() {
+        const revealButton = getElement(SELECTORS.emailReveal);
+        const result = getElement(SELECTORS.emailResult);
+        const address = getElement(SELECTORS.emailAddress);
+        const copyButton = getElement(SELECTORS.emailCopy);
+        const emailLink = getElement(SELECTORS.emailLink);
+
+        if (!revealButton || !result || !address || !copyButton || !emailLink) {
+            return;
+        }
+
+        const emailCodes = [
+            119, 111, 110, 106, 117, 110, 104, 101, 101, 46, 99, 111, 109,
+            64, 103, 109, 97, 105, 108, 46, 99, 111, 109
+        ];
+        let copyStatusTimer;
+
+        revealButton.addEventListener("click", () => {
+            const email = String.fromCharCode(...emailCodes);
+            address.textContent = email;
+            emailLink.href = `mailto:${email}`;
+            result.hidden = false;
+            revealButton.hidden = true;
+            copyButton.focus();
+        });
+
+        copyButton.addEventListener("click", async () => {
+            const email = address.textContent;
+            if (!email) return;
+
+            try {
+                await navigator.clipboard.writeText(email);
+                copyButton.textContent = "복사 완료";
+                clearTimeout(copyStatusTimer);
+                copyStatusTimer = setTimeout(() => {
+                    copyButton.textContent = "주소 복사";
+                }, 1800);
+            } catch (error) {
+                console.error("이메일 주소를 복사하지 못했습니다.", error);
+            }
+        });
     }
 
     /* ==================================================

@@ -12,7 +12,7 @@
         <meta property="og:type" content="website">
         <title>Web Design Portfolio | 원준희</title>
         <link rel="icon" href="img/icon/img_favicon.png" type="image/png">
-        <link rel="stylesheet" href="css/common.css?v=20260810-6">
+        <link rel="stylesheet" href="css/common.css?v=20260810-7">
     </head>
 
     <body id="body">
@@ -190,9 +190,19 @@
                                     <div class="contactContent">
                                         <span class="contactLabel">Email</span>
 
-                                        <a class="contactValue" href="mailto:wonjunhee.com@gmail.com">
-                                            wonjunhee.com@gmail.com
-                                        </a>
+                                        <div class="emailReveal">
+                                            <button class="contactRevealBtn" type="button" data-email-reveal>
+                                                이메일 확인
+                                            </button>
+
+                                            <div class="emailRevealResult" data-email-result hidden aria-live="polite">
+                                                <strong class="contactValue" data-email-address></strong>
+                                                <div class="emailRevealActions">
+                                                    <button type="button" data-email-copy>주소 복사</button>
+                                                    <a data-email-link>메일 보내기</a>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </li>
                             </ul>
@@ -266,7 +276,7 @@
         <script src="https://kit.fontawesome.com/07af8a896d.js" crossorigin="anonymous"></script>
         <script src="https://www.youtube.com/iframe_api"></script>
         <script src="js/portfolio-data.js"></script>
-        <script src="js/common.js?v=20260810-2"></script>
+        <script src="js/common.js?v=20260810-3"></script>
         <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.2/lib/anime.min.js"></script>
         <script type="module" src="js/motion.js?v=20260810-5"></script>
     </body>
