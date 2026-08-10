@@ -41,9 +41,9 @@
 
     const VIDEO_INFO = [
         { number: "01", title: "Diary" },
-        { number: "02", title: "Laptop" },
-        { number: "03", title: "Beer with LP" },
-        { number: "04", title: "Cherry blossom" }
+        { number: "02", title: "Rainy Sketch" },
+        { number: "03", title: "Midnight Code" },
+        { number: "04", title: "First Light" }
     ];
 
     const TYPED_WORDS = [
