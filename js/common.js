@@ -85,6 +85,8 @@
     ================================================== */
 
     function init() {
+        // Contact protection must remain available even if a later optional feature fails.
+        initEmailReveal();
         initResponsiveLayout();
         initMobileMenu();
         initTypedText();
@@ -92,7 +94,6 @@
         initScrollEvents();
         initPortfolio();
         initImageModal();
-        initEmailReveal();
         initBackgroundMusicButton();
     }
 
