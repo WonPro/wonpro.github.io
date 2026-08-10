@@ -1457,7 +1457,146 @@ body {
 .contentWrap {
     position: relative;
     width: min(100%, 120rem);
+    margin-inline: auto;
     padding-inline: 2.4rem;
+}
+
+.scrollProgress {
+    position: fixed;
+    inset: 0 auto auto 0;
+    z-index: 9999;
+    width: calc(var(--page-progress, 0) * 100%);
+    height: 0.45rem;
+    pointer-events: none;
+    background: linear-gradient(90deg, var(--butter), var(--coral), var(--violet));
+    box-shadow: 0 0 2rem rgb(255 107 136 / 55%);
+}
+
+.motionCursor {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9998;
+    width: 4.8rem;
+    height: 4.8rem;
+    pointer-events: none;
+    opacity: 0;
+    border: 1px solid rgb(255 255 255 / 45%);
+    border-radius: 50%;
+    background: rgb(121 86 255 / 18%);
+    backdrop-filter: blur(6px) invert(0.06);
+    transform: translate3d(-50%, -50%, 0);
+    transition: width 220ms ease, height 220ms ease, opacity 180ms ease, background 220ms ease;
+}
+
+.motionCursor span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0.7rem;
+    height: 0.7rem;
+    border-radius: 50%;
+    background: var(--butter);
+    transform: translate(-50%, -50%);
+}
+
+.motionCursor.is-active {
+    width: 8.4rem;
+    height: 8.4rem;
+    background: rgb(255 107 136 / 22%);
+}
+
+.kineticBand {
+    position: relative;
+    z-index: 5;
+    display: grid;
+    align-content: center;
+    width: calc(100% - 3rem);
+    min-height: 34rem;
+    margin: 1.2rem auto 0;
+    overflow: hidden;
+    border-radius: 3rem;
+    color: #fff;
+    background: var(--ink);
+    transform: rotate(-2deg);
+}
+
+.kineticBand::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 15% 30%, rgb(255 107 136 / 35%), transparent 26%),
+        radial-gradient(circle at 80% 70%, rgb(121 86 255 / 42%), transparent 30%);
+}
+
+.kineticTrack {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+    width: max-content;
+    white-space: nowrap;
+    font-family: var(--font-body);
+    font-weight: 900;
+    line-height: 0.95;
+    letter-spacing: -0.055em;
+    text-transform: uppercase;
+    will-change: transform;
+}
+
+.kineticTrack--forward {
+    font-size: clamp(5.8rem, 9vw, 13rem);
+    animation: kineticForward 18s linear infinite;
+}
+
+.kineticTrack--reverse {
+    margin-top: 2.2rem;
+    color: transparent;
+    font-size: clamp(3rem, 4.5vw, 7rem);
+    -webkit-text-stroke: 1.5px rgb(255 255 255 / 72%);
+    animation: kineticReverse 24s linear infinite;
+}
+
+.kineticTrack i {
+    color: var(--butter);
+    font-style: normal;
+    -webkit-text-stroke: 0;
+}
+
+.kineticBand__orb {
+    position: absolute;
+    top: 3rem;
+    right: clamp(3rem, 8vw, 12rem);
+    z-index: 2;
+    display: grid;
+    place-content: center;
+    width: clamp(9rem, 12vw, 16rem);
+    aspect-ratio: 1;
+    border-radius: 43% 57% 62% 38% / 52% 36% 64% 48%;
+    color: var(--ink);
+    background: var(--butter);
+    box-shadow: 0 2rem 5rem rgb(255 216 107 / 22%);
+    font-size: clamp(1.4rem, 1.8vw, 2.3rem);
+    font-weight: 900;
+    line-height: 0.85;
+    text-align: center;
+    transform: rotate(9deg);
+    animation: orbMorph 4.4s ease-in-out infinite alternate;
+}
+
+@keyframes kineticForward {
+    to { transform: translateX(-50%); }
+}
+
+@keyframes kineticReverse {
+    from { transform: translateX(-42%); }
+    to { transform: translateX(0); }
+}
+
+@keyframes orbMorph {
+    0% { border-radius: 43% 57% 62% 38% / 52% 36% 64% 48%; transform: rotate(9deg) scale(0.95); }
+    100% { border-radius: 64% 36% 43% 57% / 38% 62% 42% 58%; transform: rotate(-8deg) scale(1.08); }
 }
 
 .contentSection {
@@ -1613,10 +1752,15 @@ body {
     .tabs { border-radius: 2rem; }
     .gallery { padding: 1.2rem; border-radius: 2.2rem; }
     .profile { border-radius: 2.4rem; }
+    .kineticBand { min-height: 25rem; }
+    .kineticBand__orb { top: 2rem; right: 2rem; }
+    .motionCursor { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
     .heroLetter { opacity: 1 !important; transform: none !important; }
     .drawLine path { stroke-dasharray: none !important; stroke-dashoffset: 0 !important; }
     .card { transform: none !important; }
+    .kineticTrack,
+    .kineticBand__orb { animation: none !important; }
 }

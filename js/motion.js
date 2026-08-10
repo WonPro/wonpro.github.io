@@ -27,13 +27,59 @@ function animateHero() {
     if (reduceMotion || !letters.length) return;
 
     animate(".heroEyebrow", { opacity: [0, 1], y: [18, 0] }, { duration: 0.55 });
-    animate(
-        letters,
-        { opacity: [0, 1], y: [90, 0], rotate: [12, 0], scale: [0.55, 1] },
-        { delay: stagger(0.055), type: "spring", stiffness: 280, damping: 18 }
-    );
+    letters.forEach((letter, index) => {
+        const direction = index % 2 === 0 ? -1 : 1;
+        animate(
+            letter,
+            {
+                opacity: [0, 1],
+                x: [direction * (70 + index * 8), 0],
+                y: [index % 3 === 0 ? -130 : 120, 0],
+                rotate: [direction * (22 + index * 2), 0],
+                scale: [0.35, 1]
+            },
+            { delay: 0.08 + index * 0.045, type: "spring", stiffness: 230, damping: 15 }
+        );
+    });
     animate(".titleWrap > .specialHeading:nth-of-type(2)", { opacity: [0, 1], y: [32, 0] }, { delay: 0.35, duration: 0.7 });
     animate(".moreBtn", { opacity: [0, 1], scale: [0.72, 1] }, { delay: 0.55, ...springy });
+}
+
+function setupPageMotion() {
+    if (reduceMotion) return;
+
+    const cursor = document.querySelector(".motionCursor");
+    const videoWrap = document.querySelector(".videoWrap");
+    let ticking = false;
+
+    document.addEventListener("pointermove", (event) => {
+        if (!cursor || event.pointerType === "touch") return;
+        cursor.style.opacity = "1";
+        animate(cursor, { x: event.clientX, y: event.clientY }, { type: "spring", stiffness: 520, damping: 36, mass: 0.35 });
+    }, { passive: true });
+
+    document.querySelectorAll("a, button, .card").forEach((element) => {
+        element.addEventListener("pointerenter", () => cursor?.classList.add("is-active"));
+        element.addEventListener("pointerleave", () => cursor?.classList.remove("is-active"));
+    });
+
+    window.addEventListener("scroll", () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+            const max = Math.max(1, document.documentElement.scrollHeight - innerHeight);
+            const progress = Math.min(1, scrollY / max);
+            document.documentElement.style.setProperty("--page-progress", progress);
+            if (videoWrap && scrollY < innerHeight * 1.2) {
+                videoWrap.style.transform = `translate3d(0, ${scrollY * 0.18}px, 0) scale(${1 + scrollY * 0.00008})`;
+            }
+            ticking = false;
+        });
+    }, { passive: true });
+
+    inView(".kineticBand", (band) => {
+        animate(band, { opacity: [0, 1], scale: [0.94, 1], rotate: [-5, -2] }, { type: "spring", stiffness: 170, damping: 18 });
+    }, { amount: 0.2 });
 }
 
 function setupSpringInteractions() {
@@ -108,6 +154,7 @@ function initMotion() {
         setupSpringInteractions();
         setupScrollReveals();
         setupAnimeDrawing();
+        setupPageMotion();
     });
 }
 
