@@ -1755,6 +1755,12 @@ body {
     .kineticBand { min-height: 25rem; }
     .kineticBand__orb { top: 2rem; right: 2rem; }
     .motionCursor { display: none; }
+    .contactContent { min-width: 0; }
+    .contactValue {
+        max-width: 100%;
+        font-size: 1.5rem;
+        overflow-wrap: anywhere;
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {
