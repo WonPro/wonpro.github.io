@@ -2,6 +2,11 @@ import { animate, inView, stagger } from "https://cdn.jsdelivr.net/npm/motion@12
 
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const springy = { type: "spring", stiffness: 360, damping: 24, mass: 0.85 };
+const AMBIENT_WORDS = [
+    "MOVE", "PLAY", "CREATE", "DESIGN", "INTERACT", "BOLD", "CLEAR",
+    "IDEAS", "MOTION", "DIGITAL", "STORY", "FLOW", "TYPE", "HELLO",
+    "UI·UX", "CLICK", "SCROLL", "WON.", "MAKE IT MOVE"
+];
 
 function splitHeroTitle() {
     const title = document.querySelector("#mainVisualTitle");
@@ -168,6 +173,117 @@ function setupAnimeDrawing() {
     observer.observe(path);
 }
 
+function setupAmbientTypography() {
+    const anime = window.anime;
+    const layer = document.querySelector(".ambientTypeLayer");
+    if (reduceMotion || !anime || !layer) return;
+
+    const mobile = matchMedia("(max-width: 767px)").matches;
+    const maxTokens = mobile ? 8 : 16;
+    const spawnDelay = mobile ? 1500 : 850;
+    let lastPointerReaction = 0;
+
+    function spawnToken() {
+        if (layer.childElementCount >= maxTokens || document.hidden) return;
+
+        const token = document.createElement("span");
+        const size = anime.random(mobile ? 24 : 32, mobile ? 58 : 118);
+        token.className = "ambientTypeToken";
+        if (anime.random(0, 3) === 0) token.classList.add("is-outline");
+        if (anime.random(0, 5) === 0) token.classList.add("is-green");
+        token.textContent = AMBIENT_WORDS[anime.random(0, AMBIENT_WORDS.length - 1)];
+        token.style.left = `${anime.random(-8, 88)}vw`;
+        token.style.top = `${anime.random(4, 92)}vh`;
+        token.style.setProperty("--ambient-size", `${size}px`);
+        token.style.setProperty("--ambient-mobile-size", `${Math.min(size, 54)}px`);
+        layer.append(token);
+
+        const duration = anime.random(9000, 16000);
+        const maxOpacity = anime.random(3, 10) / 100;
+        const startX = anime.random(-80, 40);
+        const startY = anime.random(-60, 60);
+        const endX = anime.random(80, 260);
+        const endY = anime.random(-180, 180);
+
+        anime.timeline({ targets: token, easing: "linear", complete: () => token.remove() })
+            .add({
+                opacity: [0, maxOpacity],
+                translateX: [startX, startX + (endX - startX) * 0.18],
+                translateY: [startY, startY + (endY - startY) * 0.18],
+                rotate: anime.random(-18, 18),
+                duration: 1500
+            })
+            .add({
+                opacity: maxOpacity,
+                translateX: endX,
+                translateY: endY,
+                rotate: anime.random(-35, 35),
+                duration: duration - 3000
+            })
+            .add({ opacity: 0, duration: 1500 });
+    }
+
+    for (let index = 0; index < Math.min(6, maxTokens); index += 1) {
+        setTimeout(spawnToken, index * 240);
+    }
+
+    const spawnTimer = setInterval(spawnToken, spawnDelay);
+    window.addEventListener("pagehide", () => clearInterval(spawnTimer), { once: true });
+
+    document.addEventListener("pointermove", (event) => {
+        const now = performance.now();
+        if (event.pointerType === "touch" || now - lastPointerReaction < 90) return;
+        lastPointerReaction = now;
+
+        [...layer.children].forEach((token) => {
+            const rect = token.getBoundingClientRect();
+            const dx = rect.left + rect.width / 2 - event.clientX;
+            const dy = rect.top + rect.height / 2 - event.clientY;
+            if (Math.hypot(dx, dy) > 150) return;
+            anime({
+                targets: token,
+                scale: [1, 1.28, 1],
+                color: token.classList.contains("is-outline") ? undefined : ["#0a0a0a", "#006b4f", "#0a0a0a"],
+                letterSpacing: ["-0.07em", "0.02em", "-0.07em"],
+                duration: 700,
+                easing: "easeOutElastic(1, .55)"
+            });
+        });
+    }, { passive: true });
+}
+
+function setupHeroTextReplay() {
+    const anime = window.anime;
+    const title = document.querySelector("#mainVisualTitle");
+    if (reduceMotion || !anime || !title) return;
+
+    title.addEventListener("click", () => {
+        const letters = title.querySelectorAll(".heroLetter");
+        anime.remove(letters);
+        anime.timeline({ targets: letters })
+            .add({
+                translateX: () => anime.random(-140, 140),
+                translateY: () => anime.random(-100, 100),
+                rotate: () => anime.random(-55, 55),
+                opacity: 0.18,
+                scale: () => anime.random(5, 13) / 10,
+                duration: 360,
+                delay: anime.stagger(16, { from: "center" }),
+                easing: "easeInExpo"
+            })
+            .add({
+                translateX: 0,
+                translateY: 0,
+                rotate: 0,
+                opacity: 1,
+                scale: 1,
+                duration: 1050,
+                delay: anime.stagger(22, { from: "center" }),
+                easing: "easeOutElastic(1, .48)"
+            });
+    });
+}
+
 function initMotion() {
     animateHero();
     requestAnimationFrame(() => {
@@ -175,6 +291,8 @@ function initMotion() {
         setupScrollReveals();
         setupAnimeDrawing();
         setupPageMotion();
+        setupAmbientTypography();
+        setupHeroTextReplay();
     });
 }
 

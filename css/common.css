@@ -2298,6 +2298,8 @@ header.sticky { background: rgb(255 255 255 / 88%); box-shadow: 0 1px 0 rgb(0 0 
 .heroEyebrow { margin-bottom: 3rem; padding: 0.8rem 1.2rem; border: 2px solid var(--ink); border-radius: 999px; color: var(--ink); background: #fff; box-shadow: 0.4rem 0.4rem 0 var(--deep-green); backdrop-filter: none; }
 .heroSubcopy { margin-top: 3.2rem; color: rgb(0 0 0 / 68%); font-family: var(--font-body); font-size: clamp(1.6rem, 2vw, 2.4rem); line-height: 1.45; }
 .mainVisual .moreBtn { width: auto; min-width: 25rem; min-height: 6rem; margin-top: 4rem; padding-inline: 2rem; border: 2px solid var(--ink); color: #fff; background: var(--deep-green); box-shadow: 0.7rem 0.7rem 0 var(--ink); backdrop-filter: none; }
+.mainVisual .moreBtn { overflow: hidden; border-radius: 999px; isolation: isolate; }
+.mainVisual .moreBtn_bg { inset: 0; border-radius: inherit; clip-path: inset(0 round 999px); }
 .mainVisual .moreBtn::before { display: none; }
 .mainVisual .moreBtn .btnText { font-size: 1.6rem; letter-spacing: 0.04em; }
 .heroScroll { color: rgb(0 0 0 / 68%); }
@@ -2347,4 +2349,61 @@ header.sticky { background: rgb(255 255 255 / 88%); box-shadow: 0 1px 0 rgb(0 0 
     #portfolio .sectionTitle { font-size: clamp(6rem, 20vw, 9rem); }
     .gallery { box-shadow: 0.8rem 0.8rem 0 var(--deep-green); }
     .profile { box-shadow: 0.8rem 0.8rem 0 var(--deep-green); }
+}
+
+.ambientTypeLayer {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+    contain: strict;
+}
+
+.ambientTypeToken {
+    position: absolute;
+    top: 0;
+    left: 0;
+    max-width: 14ch;
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: var(--ambient-size, 5rem);
+    font-weight: 900;
+    line-height: 0.85;
+    letter-spacing: -0.07em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    opacity: 0;
+    will-change: transform, opacity;
+}
+
+.ambientTypeToken.is-outline {
+    color: transparent;
+    -webkit-text-stroke: 1px rgb(0 0 0 / 55%);
+}
+
+.ambientTypeToken.is-green {
+    color: var(--deep-green);
+}
+
+header,
+main,
+#footer,
+.topBtn,
+#toggleButton {
+    position: relative;
+    z-index: 1;
+}
+
+#mainVisualTitle {
+    cursor: pointer;
+    user-select: none;
+}
+
+@media (max-width: 767px) {
+    .ambientTypeToken { font-size: var(--ambient-mobile-size, 3.6rem); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ambientTypeLayer { display: none; }
 }
