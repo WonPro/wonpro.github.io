@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="WON. 포트폴리오 심볼">
+    <rect width="64" height="64" rx="12" fill="#006b4f"/>
+    <path d="M8 16h9l5 25 6-19h8l6 19 5-25h9L47 50h-9l-6-18-6 18h-9L8 16Z" fill="#fff"/>
+    <circle cx="55" cy="51" r="4" fill="#0a0a0a"/>
+</svg>
