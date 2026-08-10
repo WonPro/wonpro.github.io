@@ -12,7 +12,7 @@
         <meta property="og:type" content="website">
         <title>Web Design Portfolio | 원준희</title>
         <link rel="icon" href="img/icon/img_favicon.png" type="image/png">
-        <link rel="stylesheet" href="css/common.css?v=20260810-5">
+        <link rel="stylesheet" href="css/common.css?v=20260810-6">
     </head>
 
     <body id="body">
@@ -206,13 +206,17 @@
 
         <div class="imgPopUpWindow" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modalTitle">
             <div class="modal" role="document">
-                <h2 id="modalTitle" class="srOnly">
-                    포트폴리오 이미지 상세 보기
-                </h2>
+                <div class="modalHeader">
+                    <div class="modalHeading">
+                        <span>Selected work / Detail</span>
+                        <h2 id="modalTitle">Project View</h2>
+                    </div>
 
-                <button class="closeBtn" type="button" aria-label="상세 이미지 닫기">
-                    &times;
-                </button>
+                    <button class="closeBtn" type="button" aria-label="상세 이미지 닫기">
+                        <span class="closeBtnLabel">Close</span>
+                        <span class="closeBtnIcon" aria-hidden="true">&times;</span>
+                    </button>
+                </div>
 
                 <div class="imgWrap">
                     <img id="popupImg" alt="">
@@ -220,32 +224,21 @@
             </div>
         </div>
 
-        <button class="topBtn" type="button" aria-label="페이지 맨 위로 이동">
-            <i class="fas fa-arrow-alt-circle-up" aria-hidden="true"></i>
-        </button>
+        <div class="utilityDock" role="group" aria-label="페이지 도구">
+            <button id="toggleButton" type="button" aria-label="배경 음악 재생" aria-pressed="false">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512" class="fa-compact-disc fa-2x" aria-hidden="true"
+                    focusable="false">
+                    <path
+                        d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zM88 256H56c0-105.9 86.1-192 192-192v32c-88.2 0-160 71.8-160 160zm160 96c-53 0-96-43-96-96s43-96 96-96 96 43 96 96-43 96-96 96zm0-128c-17.7 0-32 14.3-32 32s14.3 32 32 32 32-14.3 32-32-14.3-32-32-32z"></path>
+                </svg>
+                <span class="utilityLabel">Sound</span>
+            </button>
 
-        <button id="toggleButton" type="button" aria-label="배경 음악 재생" aria-pressed="false">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512" class="fa-compact-disc fa-2x" aria-hidden="true"
-                focusable="false">
-                <path
-                    d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zM88 256H56c0-105.9 86.1-192 192-192v32c-88.2 0-160 71.8-160 160zm160 96c-53 0-96-43-96-96s43-96 96-96 96 43 96 96-43 96-96 96zm0-128c-17.7 0-32 14.3-32 32s14.3 32 32 32 32-14.3 32-32-14.3-32-32-32z"
-                    fill="url(#icon-gradient)"></path>
-
-                <defs>
-                    <linearGradient id="icon-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stop-color="#3655ff"></stop>
-
-                        <stop offset="25%" stop-color="#3655ff"></stop>
-
-                        <stop offset="50%" stop-color="#c26bf8"></stop>
-
-                        <stop offset="75%" stop-color="#f65660"></stop>
-
-                        <stop offset="100%" stop-color="#f65660"></stop>
-                    </linearGradient>
-                </defs>
-            </svg>
-        </button>
+            <button class="topBtn" type="button" aria-label="페이지 맨 위로 이동">
+                <span class="topBtnArrow" aria-hidden="true">↑</span>
+                <span class="utilityLabel">Top</span>
+            </button>
+        </div>
 
         <div id="player" aria-hidden="true"></div>
 
