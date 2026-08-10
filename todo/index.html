@@ -33,12 +33,17 @@
         <article class="stat"><i class="green">✓</i><div><small>완료</small><strong id="doneCount">0</strong><span>잘했어요!</span></div></article>
       </section>
 
-      <section class="board-head"><div><h2>나의 업무</h2><p>해야 할 일을 차근차근 정리해 보세요.</p></div><div class="filters" id="filters"><button class="selected" data-filter="all">전체 <span>0</span></button><button data-filter="todo">할 일 <span>0</span></button><button data-filter="progress">진행 중 <span>0</span></button><button data-filter="done">완료 <span>0</span></button></div></section>
+      <section class="date-bar" aria-label="날짜별 업무 기록">
+        <div><span class="calendar-icon">▣</span><div><strong>날짜별 기록</strong><small>등록·마감·완료한 업무를 날짜로 다시 확인하세요.</small></div></div>
+        <div class="date-controls"><button type="button" id="todayButton">오늘</button><input type="date" id="historyDate" aria-label="조회할 날짜"><button type="button" id="clearDate" class="hidden">전체 보기</button></div>
+      </section>
+
+      <section class="board-head"><div><h2 id="boardTitle">나의 업무</h2><p id="boardDescription">해야 할 일을 차근차근 정리해 보세요.</p></div><div class="filters" id="filters"><button class="selected" data-filter="all">전체 <span>0</span></button><button data-filter="todo">할 일 <span>0</span></button><button data-filter="progress">진행 중 <span>0</span></button><button data-filter="done">완료 <span>0</span></button></div></section>
       <section class="tasks" id="tasks" aria-live="polite"></section>
     </main>
   </div>
 
-  <div class="backdrop hidden" id="addModal"><section class="modal" role="dialog" aria-modal="true" aria-labelledby="addTitle"><button class="close" data-close="addModal">×</button><p class="eyebrow">NEW TASK</p><h2 id="addTitle">새 업무 추가</h2><p class="modal-lead">해야 할 일을 가볍게 기록해 두세요.</p><form id="taskForm"><label>업무명<input name="title" required placeholder="예: 주간 회의 자료 준비"></label><div class="form-row"><label>프로젝트<input name="project" placeholder="예: 마케팅"></label><label>마감일<input name="due" placeholder="예: 오늘, 8월 15일"></label></div><label>메모<textarea name="note" placeholder="업무에 필요한 내용을 적어보세요."></textarea></label><label>우선순위<select name="priority"><option value="high">긴급</option><option value="medium" selected>보통</option><option value="low">여유</option></select></label><button class="submit">업무 추가하기</button></form></section></div>
+  <div class="backdrop hidden" id="addModal"><section class="modal" role="dialog" aria-modal="true" aria-labelledby="addTitle"><button class="close" data-close="addModal">×</button><p class="eyebrow">NEW TASK</p><h2 id="addTitle">새 업무 추가</h2><p class="modal-lead">해야 할 일을 가볍게 기록해 두세요.</p><form id="taskForm"><label>업무명<input name="title" required placeholder="예: 주간 회의 자료 준비"></label><div class="form-row"><label>프로젝트<input name="project" placeholder="예: 마케팅"></label><label>마감일<input name="dueDate" type="date"></label></div><label>메모<textarea name="note" placeholder="업무에 필요한 내용을 적어보세요."></textarea></label><label>우선순위<select name="priority"><option value="high">긴급</option><option value="medium" selected>보통</option><option value="low">여유</option></select></label><button class="submit">업무 추가하기</button></form></section></div>
 
   <div class="backdrop hidden" id="reportModal"><section class="modal report-modal" role="dialog" aria-modal="true" aria-labelledby="reportTitle"><button class="close" data-close="reportModal">×</button><p class="eyebrow">WORK REPORT</p><h2 id="reportTitle">오늘의 업무보고서</h2><p class="modal-lead">현재 업무 상태를 기준으로 자동 정리했어요.</p><textarea id="reportText" readonly aria-label="생성된 업무보고서"></textarea><button class="submit" id="copyReport">보고서 복사하기</button></section></div>
   <div class="toast hidden" id="toast"></div>
