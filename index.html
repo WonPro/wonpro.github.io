@@ -49,21 +49,24 @@
                         </div>
 
                         <div class="slideVideo">
-                            <video class="bgv" autoplay muted loop playsinline preload="metadata" tabindex="-1">
-                                <source src="video/bgv2.mp4" type="video/mp4">
-                            </video>
+                            <div class="lofiScene lofiScene--rain" role="img" aria-label="비 오는 밤, 펜 태블릿으로 그림을 그리는 디자이너의 작업실">
+                                <span class="lofiScene__rain" aria-hidden="true"></span>
+                                <span class="lofiScene__glow" aria-hidden="true"></span>
+                            </div>
                         </div>
 
                         <div class="slideVideo">
-                            <video class="bgv" autoplay muted loop playsinline preload="metadata" tabindex="-1">
-                                <source src="video/bgv3.mp4" type="video/mp4">
-                            </video>
+                            <div class="lofiScene lofiScene--code" role="img" aria-label="달빛 아래 고양이와 함께 코딩하는 디자이너의 다락 작업실">
+                                <span class="lofiScene__stars" aria-hidden="true"></span>
+                                <span class="lofiScene__glow" aria-hidden="true"></span>
+                            </div>
                         </div>
 
                         <div class="slideVideo">
-                            <video class="bgv" autoplay muted loop playsinline preload="metadata" tabindex="-1">
-                                <source src="video/bgv4.mp4" type="video/mp4">
-                            </video>
+                            <div class="lofiScene lofiScene--dawn" role="img" aria-label="새벽빛이 들어오는 공간에서 인쇄 디자인을 검토하는 디자이너">
+                                <span class="lofiScene__dust" aria-hidden="true"></span>
+                                <span class="lofiScene__glow" aria-hidden="true"></span>
+                            </div>
                         </div>
                     </div>
 
@@ -71,6 +74,7 @@
                 </div>
 
                 <div class="titleWrap">
+                    <p class="heroEyebrow">WEB DESIGNER · CREATIVE DEVELOPER</p>
                     <h1 id="mainVisualTitle" class="specialHeading">
                         Hello World!
                     </h1>
@@ -131,6 +135,13 @@
                         Portfolio
                     </h2>
 
+                    <p class="sectionIntro">Design that moves, stories that stay.</p>
+
+                    <svg class="drawLine drawLine--portfolio" viewBox="0 0 420 70" aria-hidden="true">
+                        <path d="M8 47C88 8 151 64 227 30C294 0 342 25 411 9" />
+                        <circle cx="411" cy="9" r="5" />
+                    </svg>
+
                     <div class="tabs" role="tablist" aria-label="포트폴리오 카테고리">
                         
                         <button class="tab active" type="button" role="tab" data-category="uiux" aria-selected="ture"
@@ -168,6 +179,8 @@
                     <h2 id="contactTitle" class="sectionTitle">
                         Contact
                     </h2>
+
+                    <p class="sectionIntro">Have a project in mind? Let’s make it move.</p>
 
                     <div class="profile">
                         <div class="texting">
@@ -294,12 +307,11 @@
         </footer>
 
         <script src="https://kit.fontawesome.com/07af8a896d.js" crossorigin="anonymous"></script>
-        <script src="js/portfolio-data.js"></script>
-        <script type="module" src="js/common.js"></script>
-
         <script src="https://www.youtube.com/iframe_api"></script>
         <script src="js/portfolio-data.js"></script>
         <script src="js/common.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.2/lib/anime.min.js"></script>
+        <script type="module" src="js/motion.js"></script>
     </body>
 
 </html>
