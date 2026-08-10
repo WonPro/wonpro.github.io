@@ -1062,6 +1062,9 @@
             return;
         }
 
+        if (revealButton.dataset.emailReady === "true") return;
+        revealButton.dataset.emailReady = "true";
+
         const emailCodes = [
             119, 111, 110, 106, 117, 110, 104, 101, 101, 46, 99, 111, 109,
             64, 103, 109, 97, 105, 108, 46, 99, 111, 109
