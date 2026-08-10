@@ -8,18 +8,27 @@ function splitHeroTitle() {
     if (!title || title.dataset.split) return [];
 
     title.dataset.split = "true";
-    const letters = [...title.textContent.trim()];
-    title.setAttribute("aria-label", letters.join(""));
+    const label = title.textContent.trim().replace(/\s+/g, " ");
+    const words = label.split(" ");
+    title.setAttribute("aria-label", label);
     title.textContent = "";
 
-    return letters.map((letter) => {
-        const span = document.createElement("span");
-        span.className = "heroLetter";
-        span.textContent = letter === " " ? "\u00a0" : letter;
-        span.setAttribute("aria-hidden", "true");
-        title.append(span);
-        return span;
+    const letters = [];
+    words.forEach((word) => {
+        const wordSpan = document.createElement("span");
+        wordSpan.className = "heroWord";
+        [...word].forEach((letter) => {
+            const span = document.createElement("span");
+            span.className = "heroLetter";
+            span.textContent = letter;
+            span.setAttribute("aria-hidden", "true");
+            wordSpan.append(span);
+            letters.push(span);
+        });
+        title.append(wordSpan);
     });
+
+    return letters;
 }
 
 function animateHero() {
@@ -41,7 +50,7 @@ function animateHero() {
             { delay: 0.08 + index * 0.045, type: "spring", stiffness: 230, damping: 15 }
         );
     });
-    animate(".titleWrap > .specialHeading:nth-of-type(2)", { opacity: [0, 1], y: [32, 0] }, { delay: 0.35, duration: 0.7 });
+    animate(".heroSubcopy", { opacity: [0, 1], y: [32, 0] }, { delay: 0.35, duration: 0.7 });
     animate(".moreBtn", { opacity: [0, 1], scale: [0.72, 1] }, { delay: 0.55, ...springy });
 }
 
@@ -49,13 +58,20 @@ function setupPageMotion() {
     if (reduceMotion) return;
 
     const cursor = document.querySelector(".motionCursor");
-    const videoWrap = document.querySelector(".videoWrap");
+    const typeHero = document.querySelector(".typeHero");
+    const floatingWords = [...document.querySelectorAll(".typeHero__word")];
     let ticking = false;
 
     document.addEventListener("pointermove", (event) => {
         if (!cursor || event.pointerType === "touch") return;
         cursor.style.opacity = "1";
         animate(cursor, { x: event.clientX, y: event.clientY }, { type: "spring", stiffness: 520, damping: 36, mass: 0.35 });
+        const dx = event.clientX / innerWidth - 0.5;
+        const dy = event.clientY / innerHeight - 0.5;
+        floatingWords.forEach((word, index) => {
+            const depth = 18 + index * 12;
+            animate(word, { x: dx * depth, y: dy * depth }, { type: "spring", stiffness: 180, damping: 20 });
+        });
     }, { passive: true });
 
     document.querySelectorAll("a, button, .card").forEach((element) => {
@@ -70,8 +86,8 @@ function setupPageMotion() {
             const max = Math.max(1, document.documentElement.scrollHeight - innerHeight);
             const progress = Math.min(1, scrollY / max);
             document.documentElement.style.setProperty("--page-progress", progress);
-            if (videoWrap && scrollY < innerHeight * 1.2) {
-                videoWrap.style.transform = `translate3d(0, ${scrollY * 0.18}px, 0) scale(${1 + scrollY * 0.00008})`;
+            if (typeHero && scrollY < innerHeight * 1.2) {
+                typeHero.style.transform = `translate3d(0, ${scrollY * 0.12}px, 0) scale(${1 + scrollY * 0.00005})`;
             }
             ticking = false;
         });
@@ -80,6 +96,10 @@ function setupPageMotion() {
     inView(".kineticBand", (band) => {
         animate(band, { opacity: [0, 1], scale: [0.94, 1], rotate: [-5, -2] }, { type: "spring", stiffness: 170, damping: 18 });
     }, { amount: 0.2 });
+
+    inView("#portfolio .sectionTitle", (title) => {
+        animate(title, { opacity: [0, 1], y: [120, 0], scale: [0.78, 1], letterSpacing: ["-0.12em", "-0.075em"] }, { type: "spring", stiffness: 150, damping: 17 });
+    }, { amount: 0.35 });
 }
 
 function setupSpringInteractions() {
