@@ -178,6 +178,7 @@ function setupAmbientTypography() {
     const layer = document.querySelector(".ambientTypeLayer");
     if (reduceMotion || !anime || !layer) return;
 
+    // Keep the ambient layer intentionally sparse on small screens so it never competes with content.
     const mobile = matchMedia("(max-width: 767px)").matches;
     const maxTokens = mobile ? 8 : 16;
     const spawnDelay = mobile ? 1500 : 850;
@@ -205,6 +206,7 @@ function setupAmbientTypography() {
         const endX = anime.random(80, 260);
         const endY = anime.random(-180, 180);
 
+        // Every token owns its lifecycle; removal on completion prevents detached animation buildup.
         anime.timeline({ targets: token, easing: "linear", complete: () => token.remove() })
             .add({
                 opacity: [0, maxOpacity],
@@ -230,6 +232,7 @@ function setupAmbientTypography() {
     const spawnTimer = setInterval(spawnToken, spawnDelay);
     window.addEventListener("pagehide", () => clearInterval(spawnTimer), { once: true });
 
+    // Throttle proximity reactions to avoid running a full token scan for every pointer event.
     document.addEventListener("pointermove", (event) => {
         const now = performance.now();
         if (event.pointerType === "touch" || now - lastPointerReaction < 90) return;
