@@ -108,7 +108,7 @@ function setupPageMotion() {
 }
 
 function setupSpringInteractions() {
-    document.querySelectorAll(".moreBtn, .tab, .card, .contactItem, .topBar .link").forEach((element) => {
+    document.querySelectorAll(".moreBtn, .contactItem, .topBar .link").forEach((element) => {
         element.addEventListener("pointerenter", (event) => {
             if (event.pointerType === "touch") return;
             animate(element, { scale: 1.045, y: -5 }, springy);
@@ -118,20 +118,6 @@ function setupSpringInteractions() {
         });
     });
 
-    document.querySelectorAll(".card").forEach((card) => {
-        card.addEventListener("pointermove", (event) => {
-            if (reduceMotion) return;
-            const rect = card.getBoundingClientRect();
-            const rx = ((event.clientY - rect.top) / rect.height - 0.5) * -7;
-            const ry = ((event.clientX - rect.left) / rect.width - 0.5) * 7;
-            card.style.setProperty("--rx", `${rx}deg`);
-            card.style.setProperty("--ry", `${ry}deg`);
-        });
-        card.addEventListener("pointerleave", () => {
-            card.style.setProperty("--rx", "0deg");
-            card.style.setProperty("--ry", "0deg");
-        });
-    });
 }
 
 function setupScrollReveals() {

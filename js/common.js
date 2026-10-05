@@ -619,7 +619,7 @@
             ? window.portfolioData
             : [];
 
-        shuffleArray(data);
+        // Keep curated order: development projects lead every visit.
 
         gallery.replaceChildren();
 
@@ -649,20 +649,10 @@
             }
 
             openImageModal(
-                modalButton.dataset.imageUrl,
-                modalButton.dataset.imageAlt
+                window.portfolioData.find((item) => String(item.id) === modalButton.dataset.projectId)
             );
         });
 
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-
-            return array;
-        }
     }
 
     function preparePortfolioTabs(tabs) {
@@ -730,7 +720,7 @@
         const description = document.createElement("div");
 
         card.className = "card";
-        card.dataset.category = item.category ?? "";
+        card.dataset.category = (item.categories ?? [item.category]).join(" ");
 
         description.className = "description";
         description.textContent =
@@ -742,37 +732,25 @@
         image.style.backgroundImage =
             `url("${String(item.thumbnail ?? "").replaceAll('"', '\\"')}")`;
 
-        if (item.category === "homepage") {
-            const link = document.createElement("a");
-
-            link.href = item.url ?? "#";
-            link.target = "_blank";
-            link.rel = "noopener noreferrer";
-            link.setAttribute(
-                "aria-label",
-                `${description.textContent} 새 창에서 보기`
-            );
-
-            image.setAttribute("aria-hidden", "true");
-            link.append(image);
-            card.append(link, description);
-
-            return card;
-        }
-
         const button = document.createElement("button");
 
         button.type = "button";
         button.dataset.portfolioModal = "true";
+        button.dataset.projectId = item.id;
         button.dataset.imageUrl = item.image ?? "";
         button.dataset.imageAlt =
             item.alt ?? description.textContent;
         button.setAttribute(
             "aria-label",
-            `${description.textContent} 상세 이미지 보기`
+            `${description.textContent} 프로젝트 상세 보기`
         );
 
         image.setAttribute("aria-hidden", "true");
+        if (!item.thumbnail) {
+            image.classList.add("card-text-cover");
+            image.textContent = item.coverText || "FRONTEND / 거래 화면 구현";
+            image.style.backgroundImage = "none";
+        }
         button.append(image);
         card.append(button, description);
 
@@ -792,7 +770,7 @@
         const filteredCards = cards.filter((card) => {
             return (
                 category === "all" ||
-                card.dataset.category === category
+                card.dataset.category.split(" ").includes(category)
             );
         });
 
@@ -946,7 +924,7 @@
         modal.setAttribute("aria-modal", "true");
         modal.setAttribute("aria-hidden", "true");
 
-        closeButton?.setAttribute("aria-label", "상세 이미지 닫기");
+        closeButton?.setAttribute("aria-label", "프로젝트 상세 닫기");
 
         closeButton?.addEventListener("click", closeImageModal);
 
@@ -968,19 +946,70 @@
         });
     }
 
-    function openImageModal(imageUrl, imageAlt = "포트폴리오 상세 이미지") {
+    function openImageModal(item) {
         const modal = getElement(SELECTORS.imageModal);
         const popupImage = getElement(SELECTORS.popupImage);
         const closeButton = getElement(SELECTORS.imageModalClose);
 
-        if (!modal || !popupImage || !imageUrl) {
+        if (!modal || !popupImage || !item) {
             return;
         }
 
         state.lastFocusedElement = document.activeElement;
 
-        popupImage.src = imageUrl;
-        popupImage.alt = imageAlt;
+        document.getElementById("modalTitle").textContent = item.title;
+        const details = document.getElementById("projectDetails");
+        details.replaceChildren();
+        function section(title, value) {
+            const block = document.createElement("section");
+            const heading = document.createElement("h3");
+            heading.textContent = title;
+            block.append(heading);
+            if (Array.isArray(value)) {
+                const list = document.createElement("ul");
+                value.forEach((text) => { const li = document.createElement("li"); li.textContent = text; list.append(li); });
+                block.append(list);
+            } else {
+                const text = document.createElement("p"); text.textContent = value; block.append(text);
+            }
+            details.append(block);
+        }
+        section("서비스 / 작업 개요", item.overview || item.description);
+        section("담당 범위", item.role?.length ? item.role : "프로젝트별 담당 범위 자료 확인 필요");
+        section("사용 기술", item.skills?.length ? item.skills : "기존 자료에 프로젝트별 기술 정보가 기재되어 있지 않습니다.");
+        section("주요 구현 / 작업 내용", item.features || item.role || "자료 확인 필요");
+        if (!["detail", "etc"].includes(item.category) && item.process !== null) {
+            section("구현 과정 / 문제 해결", item.process || "구현 과정 및 문제 해결 경험은 추가 자료 확인 후 보완할 예정입니다.");
+        }
+        if (item.url) {
+            const link = document.createElement("a");
+            link.href = item.url; link.target = "_blank"; link.rel = "noopener noreferrer";
+            link.textContent = "기존 자료의 서비스 링크 ↗ (새 창)";
+            details.append(link);
+            section("링크 안내", "기존 포트폴리오에 기재된 주소입니다. 현재 운영 화면은 작업 당시 결과와 다를 수 있습니다.");
+        }
+        popupImage.hidden = !item.image && !item.thumbnail;
+        if (!popupImage.hidden) {
+            popupImage.src = item.image || item.thumbnail;
+            popupImage.alt = item.alt || `${item.title} 화면`;
+            const heading = document.createElement("h3");
+            heading.className = "projectImagesTitle";
+            heading.textContent = "화면 이미지";
+            details.append(heading);
+        } else popupImage.removeAttribute("src");
+        const screenshots = document.getElementById("projectScreenshots");
+        screenshots.replaceChildren();
+        (item.screenshots || []).forEach((screen) => {
+            const figure = document.createElement("figure");
+            const image = document.createElement("img");
+            image.src = screen.src;
+            image.alt = screen.alt;
+            image.loading = "lazy";
+            figure.append(image);
+            screenshots.append(figure);
+        });
+        getElement(".imgWrap", modal).scrollTop = 0;
+        document.querySelectorAll("body > header, body > main, body > footer, .utilityDock").forEach((el) => el.inert = true);
 
         modal.classList.add("active");
         modal.setAttribute("aria-hidden", "false");
@@ -999,6 +1028,7 @@
             return;
         }
 
+        document.querySelectorAll("body > header, body > main, body > footer, .utilityDock").forEach((el) => el.inert = false);
         modal.classList.remove("active");
         modal.setAttribute("aria-hidden", "true");
         document.body.classList.remove("modal-open");
@@ -1161,6 +1191,8 @@
                 onReady: () => {
                     isYoutubePlayerReady = true;
                     youtubePlayer.setVolume(30);
+                    const button = document.querySelector(SELECTORS.musicButton);
+                    if (button) button.disabled = false;
                 },
 
                 onStateChange: event => {
@@ -1178,6 +1210,12 @@
 
                     isYoutubePlayerReady = false;
                     updateMusicButton(false);
+                    const button = document.querySelector(SELECTORS.musicButton);
+                    if (button) {
+                        button.disabled = true;
+                        button.setAttribute("aria-label", "배경 음악 재생 불가: 외부 영상 재생 제한");
+                        button.title = "외부 영상의 재생 제한으로 현재 배경 음악을 사용할 수 없습니다.";
+                    }
                 }
             }
         });
